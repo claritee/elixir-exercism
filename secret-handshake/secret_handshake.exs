@@ -25,9 +25,9 @@ defmodule SecretHandshake do
       4 => "close your eyes",
       8 => "jump"}
     |> Enum.reduce([], fn({k, v}, acc) ->
-        if band(code, k) == k, do: List.insert_at(acc, 0, v), else: acc
+        if band(code, k) == k, do: acc ++ [v], else: acc
        end)
     
-    if band(code, 16) == 16, do: commands_list, else: commands_list |> Enum.reverse
+    if band(code, 16) == 16, do: commands_list |> Enum.reverse, else: commands_list
   end
 end
