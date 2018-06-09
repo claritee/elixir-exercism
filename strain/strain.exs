@@ -7,6 +7,7 @@ defmodule Strain do
   """
   @spec keep(list :: list(any), fun :: (any -> boolean)) :: list(any)
   def keep(list, fun) do
+    filter(list, fun, true)
   end
 
   @doc """
@@ -17,5 +18,11 @@ defmodule Strain do
   """
   @spec discard(list :: list(any), fun :: (any -> boolean)) :: list(any)
   def discard(list, fun) do
+    filter(list, fun, false)
+  end
+
+  defp filter(list, fun, condition) do
+    list
+    |> Enum.reduce([], fn(x, acc) -> if fun.(x) == condition, do: acc ++ [x], else: acc end)
   end
 end
