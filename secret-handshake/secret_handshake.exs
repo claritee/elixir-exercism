@@ -20,15 +20,13 @@ defmodule SecretHandshake do
     # Loop through bits and get the command: code AND key == key
     # If the match is code AND 10000: then reverse the commands list
 
-    command_mapping = %{1 => "wink",
+    commands_list = %{1 => "wink",
       2 => "double blink",
       4 => "close your eyes",
       8 => "jump"}
-    commands_list = command_mapping
     |> Enum.reduce([], fn({k, v}, acc) ->
-        if band(code, k) == k, do: List.insert_at(acc, 0, v), else: List.insert_at(acc, 0, nil)
+        if band(code, k) == k, do: List.insert_at(acc, 0, v), else: acc
        end)
-    |> Enum.filter(&(&1 != nil))
     
     if band(code, 16) == 16, do: commands_list, else: commands_list |> Enum.reverse
   end
