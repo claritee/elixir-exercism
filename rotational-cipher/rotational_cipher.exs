@@ -14,13 +14,11 @@ defmodule RotationalCipher do
   	|> String.Chars.to_string
   end
 
-  def new_value(x, shift) do
-  	cond do
-		(x in ?a..?z) && (x + shift <= ?z) -> x + shift	
-		(x in ?a..?z) && (x + shift > ?z) -> x - 26 + shift
-		(x in ?A..?Z) && (x + shift <= ?Z) -> x + shift
-		(x in ?A..?Z) && (x + shift > ?Z) -> x - 26 + shift
-		true -> x
-	end
+  defp new_value(x, shift) when (x in ?a..?z), do: shift_in_range(x, shift, ?z) 
+  defp new_value(x, shift) when (x in ?A..?Z), do: shift_in_range(x, shift, ?Z) 
+  defp new_value(x, _), do: x
+
+  defp shift_in_range(x, shift, upper) do
+  	if (x + shift <= upper), do: x + shift, else: x - 26 + shift
   end
 end
