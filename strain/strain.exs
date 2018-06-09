@@ -1,4 +1,6 @@
 defmodule Strain do
+  # Note: Refer to https://elixir-lang.org/getting-started/recursion.html#reduce-and-map-algorithms
+
   @doc """
   Given a `list` of items and a function `fun`, return the list of items where
   `fun` returns true.
@@ -7,7 +9,7 @@ defmodule Strain do
   """
   @spec keep(list :: list(any), fun :: (any -> boolean)) :: list(any)
   def keep(list, fun) do
-    filter(list, fun, true)
+    reduce(list, fun, true)
   end
 
   @doc """
@@ -18,11 +20,17 @@ defmodule Strain do
   """
   @spec discard(list :: list(any), fun :: (any -> boolean)) :: list(any)
   def discard(list, fun) do
-    filter(list, fun, false)
+    reduce(list, fun, false)
   end
 
-  defp filter(list, fun, condition) do
-    list
-    |> Enum.reduce([], fn(x, acc) -> if fun.(x) == condition, do: acc ++ [x], else: acc end)
+  defp reduce(list, fun, condition) do
+    reduce(list, [], fun, condition) |> Enum.reverse
   end
+
+  defp reduce([head | tail], accumulator, fun, condition) do
+    result = if fun.(head) == condition, do: [head | accumulator], else: accumulator
+    reduce(tail, result, fun, condition)
+  end
+
+  defp reduce([], accumulator, fun, condition), do: accumulator
 end
